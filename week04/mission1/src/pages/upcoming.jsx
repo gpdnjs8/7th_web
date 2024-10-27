@@ -27,15 +27,19 @@ const UpComingPage = () => {
     
   return (
     <Container>
-      {movies.data?.results.map((movie) => (
-        <M_Comp
-          key={movie.id}
-          id={movie.id}
-          image={movie.poster_path} 
-          title={movie.title} 
-          releaseDate={movie.release_date} 
-        />
-      ))}
+      {movies?.results?.length > 0 ? (
+            movies.results.map((movie) => (
+              <M_Comp
+                key={movie.id}
+                id={movie.id}
+                image={movie.poster_path} 
+                title={movie.title} 
+                releaseDate={movie.release_date} 
+              />
+            ))
+        ) : (
+            <div>Loading...</div>
+        )}
     </Container>
   );
 };

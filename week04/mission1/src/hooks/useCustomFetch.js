@@ -12,14 +12,13 @@ const useCustomFetch = (url) => {
         setIsLoading(true);
         try {
             const response = await axiosInstance.get(url);
-            setData(response);
+            setData(response.data);  //response.data
         } catch (error) {
             setIsError(true);
         } finally {
             setIsLoading(false);
         }
       };
-      
       fetchData();
     }, [url]); 
 

@@ -7,32 +7,19 @@ import './detail.css';
 
 const DetailPage=()=>{
     const {movieId} = useParams();
-    const [credits, setCredits] = useState(null);
-    const [movie, setMovie] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isError, setIsError] = useState(false);
-
-    useEffect(() => {
-        const fetchMovieDetails = async () => {
-        setIsLoading(true);
-          try {
-            const movieResponse = await axiosInstance.get(`/movie/${movieId}?language=ko-KR`);
-            setMovie(movieResponse.data);
-            const creditsResponse = await axiosInstance.get(`/movie/${movieId}/credits?language=ko-KR`);
-            setCredits(creditsResponse.data);
-          } catch (error) {
-            setIsError(true);
-          } finally {
-            setIsLoading(false);
-          }
-        };
-        fetchMovieDetails();
-    }, [movieId]);
-
+    const { data: credits, isLoading: creditsLoading, isError: creditsError } = useCustomFetch(`/movie/${movieId}/credits?language=ko-KR`);
+    const { data: movie, isLoading: movieLoading, isError: movieError } = useCustomFetch(`/movie/${movieId}?language=ko-KR`);
     
-    if (isLoading) return <h1>Loading...</h1>;
-    if (isError) return <h1>Error</h1>;
-
+    if (!movie || !credits) {
+        return <h1>No data</h1>;
+    }
+    if (movieLoading || creditsLoading) {
+        return <h1>Loading...</h1>;
+    }
+    if (movieError || creditsError) {
+        return <h1>Fail to fetch</h1>;
+    }
+    
     return (
         <div className="detail-page">
             <div className="poster-container">
@@ -55,7 +42,8 @@ const DetailPage=()=>{
             <div className="credits-container">
                 <h3>감독/출연</h3>
                 <ul>
-                    {credits.cast.slice(0, 20).map(castMember => (
+                    {credits?.cast && credits.cast.length > 0 ? (
+                        credits.cast.slice(0, 20).map(castMember => (
                         <li key={castMember.id}>
                             <img
                                 className="credit-image"
@@ -65,7 +53,8 @@ const DetailPage=()=>{
                             <div className="credit-name">{castMember.name}</div> {/* 출연진 이름 */}
                             <div className="credit-character">{castMember.character}</div> {/* 배역 */}
                         </li>
-                    ))}
+                    ))
+                ):(<li>출연진 정보가 없습니다.</li>)}
                 </ul>
             </div>
         </div>

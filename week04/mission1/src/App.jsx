@@ -28,9 +28,11 @@ const router = createBrowserRouter([
           { path: 'popular', element: <PopularPage /> },
           { path: 'top-rated', element: <TopRatedPage /> },
           { path: 'up-coming', element: <UpComingPage /> },
-          { path: ':movieId', element: <DetailPage /> },
         ],
       },
+      {
+        path: 'movies/:movieId', element: <DetailPage />
+      }
     ],
     errorElement: <h1>잘못된 경로</h1>
   },
