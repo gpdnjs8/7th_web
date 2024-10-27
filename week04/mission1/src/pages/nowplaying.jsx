@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import M_Comp from '../components/movies'
 import styled from 'styled-components';
-import { axiosInstance } from '../apis/axios-instance';
 import useCustomFetch from '../hooks/useCustomFetch';
 
 const Container = styled.div`

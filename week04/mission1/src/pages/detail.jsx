@@ -1,15 +1,13 @@
 /* detail page */
-import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import { axiosInstance } from '../apis/axios-instance';
 import useCustomFetch from '../hooks/useCustomFetch';
 import './detail.css';
 
 const DetailPage=()=>{
     const {movieId} = useParams();
-    const { data: credits, isLoading: creditsLoading, isError: creditsError } = useCustomFetch(`/movie/${movieId}/credits?language=ko-KR`);
     const { data: movie, isLoading: movieLoading, isError: movieError } = useCustomFetch(`/movie/${movieId}?language=ko-KR`);
-    
+    const { data: credits, isLoading: creditsLoading, isError: creditsError } = useCustomFetch(`/movie/${movieId}/credits?language=ko-KR`);
+   
     if (!movie || !credits) {
         return <h1>No data</h1>;
     }
