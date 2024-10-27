@@ -54,7 +54,7 @@ const DetailPage=()=>{
                             <div className="credit-character">{castMember.character}</div> {/* 배역 */}
                         </li>
                     ))
-                ):(<li>출연진 정보가 없습니다.</li>)}
+                ):(<h4>출연진 정보 없음</h4>)}
                 </ul>
             </div>
         </div>
