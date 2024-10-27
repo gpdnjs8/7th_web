@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import M_Comp from '../components/movies'
 import styled from 'styled-components';
+import { axiosInstance } from '../apis/axios-instance';
+import useCustomFetch from '../hooks/useCustomFetch';
 
 const Container = styled.div`
   display: flex; 
@@ -11,44 +13,22 @@ const Container = styled.div`
 `;
 
 const NowPlayingPage = () => {
-    const [movies, setMovies] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-  
-    useEffect(() => {
-      const ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YjA4NDVjNTRjMTRhNWI0NDRhMWNjMzc2ZTRkNmNhNSIsIm5iZiI6MTcyODY2MDIzNy4xNTk2MTYsInN1YiI6IjY3MDkzZjI5OGQ0ODdmNjU0MTI4OWFlZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HUEIbzGCckJran3SYfO-pLgC5275G7dfdXDBxWjUNzc';
-      const API_URL = 'https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&page=1';
-  
-      const fetchMovies = async () => {
-        try {
-          const response = await fetch(API_URL, {
-            headers: {
-              'Authorization': `Bearer ${ACCESS_TOKEN}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          setMovies(data.results);
-          setIsLoading(false);
-        } catch (error) {
-          console.error('Error fetching: ', error);
-          setError(error.message);
-          setIsLoading(false);
-        }
-      };
-  
-      fetchMovies();
-    }, []); 
-  
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    const {data: movies, isLoading, isError} = useCustomFetch('/movie/now_playing?language=ko-KR&page=1');
+
+    if(isLoading){
+      return<div>
+          <h1>Loading...</h1>
+      </div>
+    }
+    if(isError){
+      return<div>
+          <h1>Error</h1>
+      </div>
+    }
 
     return (
         <Container>
-          {movies.map((movie) => (
+          {movies.data?.results.map((movie) => (
             <M_Comp
               key={movie.id}
               id={movie.id}
