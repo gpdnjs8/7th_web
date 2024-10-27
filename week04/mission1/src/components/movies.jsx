@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 const Display = styled.div`
   position: relative;
@@ -60,8 +61,13 @@ const M_Comp = ({ id, image, title, releaseDate }) => {
     const onMouseEnter = () => setIsHovered(true);
     const onMouseLeave = () => setIsHovered(false);
     
+    const navigate = useNavigate();
+    const Click = () => {
+      navigate(`/movies/${id}`);
+    };
+
     return (
-    <Display onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <Display onClick={Click} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <Img src={`https://image.tmdb.org/t/p/original/${image}`} alt={title} />
       <Background isHovered={isHovered} />
       <TitleContainer>
