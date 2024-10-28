@@ -1,7 +1,5 @@
 /* detail page */
-import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import { axiosInstance } from '../apis/axios-instance';
 import useCustomFetch from '../hooks/useCustomFetch';
 import './detail.css';
 
