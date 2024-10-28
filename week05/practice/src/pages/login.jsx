@@ -1,54 +1,92 @@
 /* login page */
-import React from 'react';
-import {useForm} from 'react-hook-form'             // useForm hook
-import * as yup from 'yup'                          // yup
-import {yupResolver} from '@hookform/resolvers/yup'
-import './login.css';
+import styled from "styled-components"
+import useForm from "../hooks/useForm"             // useForm hook
+import { validateLogin } from "../utils/validate";
 
 const LoginPage = () => {
-  const schema = yup.object().shape({
-    email: yup.string().email('올바른 이메일 형식이 아닙니다. 다시 확인해주세요').required('이메일을 반드시 입력해주세요.'),
-    password: yup.string().min(8, '비밀번호는 8자 이상이어야 합니다.').max(16, '비밀번호는 16자 이하여야 합니다.').required(),
-  })
-
-  const {register, handleSubmit, formState: {errors, isValid}} = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onTouched'
+  const login = useForm({
+    initialValue: {
+      email: '',
+      password: '',
+    },
+    validate: validateLogin,
   });
 
-  const onSubmit = (data) => {
-    console.log('폼 데이터 제출')
-    console.log(data);
+  const handlePressLogin = () => {
+    console.log(login.values.email, login.values.password)
   }
 
+  const isFormValid = !login.errors.email && !login.errors.password;
+
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit(onSubmit)} className="login-form">
-        <h1>로그인</h1>
+    <Container>
+      <h1>로그인</h1>
 
-        {/* 이메일 */}
-        <input
-          type="email" placeholder="이메일을 입력해주세요!" {...register("email")}
-          className="login-input"
-        />
-        <p className="error-message">{errors.email?.message}</p>
+      <Input
+        error={login.touched.email && login.errors.email}
+        type={'email'}
+        placeholder={'이메일을 입력해주세요!'}
+        {...login.getTextInputProps('email')}
+      />
+      {login.touched.email && login.errors.email && <ErrorText>{login.errors.email}</ErrorText>}
 
-        {/* 비밀번호 */}
-        <input
-          type="password" placeholder="비밀번호를 입력해주세요!" {...register("password")}
-          className="login-input"
-        />
-        <p className="error-message">{errors.password?.message}</p>
+      <Input
+        error={login.touched.password && login.errors.password}
+        type={'password'}
+        placeholder={'비밀번호를 입력해주세요!'}
+        {...login.getTextInputProps('password')}
+      />
+      {login.touched.password && login.errors.password && <ErrorText>{login.errors.password}</ErrorText>}
 
-        {/* 로그인 버튼 */}
-        <button
-          type="submit"
-          disabled={!isValid}
-          className={`login-button ${isValid ? 'enabled' : 'disabled'}`}
-        >로그인</button>
-      </form>
-    </div>
+      <Button
+        onClick={handlePressLogin}
+        disabled={!isFormValid}
+        isFormValid={isFormValid}
+      >로그인</Button>
+    </Container>
   );
 };
 
 export default LoginPage;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+`
+
+const Input = styled.input`
+  margin: 10px 0;
+  padding: 1rem;
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border: ${props => props.error ? '4px solid red' : '1px solid #ccc'};
+  &:focus {
+    border-color: #007bff;
+  }
+`
+const ErrorText = styled.h1`
+  color: red;
+  font-size: 14px;
+`
+const Button = styled.button`
+  background-color: ${(props) => (props.isFormValid ? '#ff4b6e' : '#ccc')};
+  color: white;
+  width: 400px;
+  padding: 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  cursor: ${(props) => (props.isFormValid ? 'pointer' : 'not-allowed')};
+  &:disabled {
+    cursor: not-allowed;
+  }
+`
+
