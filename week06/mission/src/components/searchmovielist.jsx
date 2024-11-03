@@ -10,8 +10,7 @@ const SearchMovieList = () => {
         mq: ''
     })
     
-    const mq = searchParams.get('mq')
-
+    const mq = searchParams.get('mq');
     const url = `/search/movie?query=${mq}&include_adult=false&language=ko-KR&page=1`;
     const {data: movies, isLoading, isError} = useCustomFetch(url);
     
@@ -28,24 +27,28 @@ const SearchMovieList = () => {
     }
 
     return(
-      <S.MovieGridContainer>
-        {mq && movies?.results?.length > 0 ? (
-                  movies.results.map((movie) => (
+      <>
+        <S.MovieGridContainer>
+            {mq && movies?.results?.length > 0 ? (
+                movies.results.map((movie) => (
                     <M_Comp
-                      key={movie.id}
-                      id={movie.id}
-                      image={movie.poster_path} 
-                      title={movie.title} 
-                      releaseDate={movie.release_date} 
+                        key={movie.id}
+                        id={movie.id}
+                        image={movie.poster_path}
+                        title={movie.title}
+                        releaseDate={movie.release_date}
                     />
-                  ))
-              ) : (
-                  <div style={{textAlign: 'center', marginTop: '30px'}}>
-                    <h1 style={{color: 'white'}}>해당하는 검색어 {mq}에</h1>
-                    <h1 style={{color: 'white'}}>해당하는 데이터가 없습니다.</h1>
-                  </div>
+                ))
+            ) : null} 
+        </S.MovieGridContainer>
+
+        {(!mq || movies?.results?.length === 0) && ( 
+            <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                <h1 style={{ color: 'white' }}>해당하는 검색어 {mq}에</h1>
+                <h1 style={{ color: 'white' }}>해당하는 데이터가 없습니다.</h1>
+            </div>
         )}
-      </S.MovieGridContainer>
+      </>
     );
 };
 

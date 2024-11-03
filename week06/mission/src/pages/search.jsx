@@ -8,8 +8,6 @@ import SearchMovieList from '../components/searchmovielist.jsx';
 const SearchPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
-
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const mq = searchParams.get('mq') || '';
@@ -31,12 +29,9 @@ const SearchPage = () => {
   }
 
   useEffect(() => {
-    
     setSearchValue(mq);
-    
   }, [mq]);
   
-
   return (
     <>
       <S.SearchContainer>

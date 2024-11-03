@@ -26,7 +26,7 @@ const MovieGridContainer = styled.div`
     margin-top: 30px;
     display: flex;
     flex-wrap: wrap;
-    jjustify-content: flex-start; 
+    justify-content: flex-start; 
 `;
 
 export {SearchContainer, MovieGridContainer}
