@@ -24,9 +24,9 @@ const SearchContainer = styled.div`
 `
 const MovieGridContainer = styled.div`
     margin-top: 30px;
-    display: grid;
-    grid-template-column: repeat(auto-fit, minmax(140px, 1fr));
-    
-`
+    display: flex;
+    flex-wrap: wrap;
+    jjustify-content: flex-start; 
+`;
 
 export {SearchContainer, MovieGridContainer}

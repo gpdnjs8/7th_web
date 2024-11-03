@@ -8,7 +8,7 @@ import Card_list_sk from './card_list_sk.jsx';
 const SearchMovieList = () => {
     const [searchParams, setSearchParams] = useSearchParams({
         mq: ''
-      })
+    })
     
     const mq = searchParams.get('mq')
 
@@ -28,7 +28,7 @@ const SearchMovieList = () => {
     }
 
     return(
-        <S.MovieGridContainer>
+      <S.MovieGridContainer>
         {mq && movies?.results?.length > 0 ? (
                   movies.results.map((movie) => (
                     <M_Comp

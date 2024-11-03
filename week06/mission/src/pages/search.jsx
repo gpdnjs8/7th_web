@@ -1,7 +1,7 @@
 /* search page */
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as S from './searchstyle.js'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import SearchMovieList from '../components/searchmovielist.jsx';
 
 
@@ -9,19 +9,18 @@ const SearchPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
 
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const mq = searchParams.get('mq') || '';
+
   const onChangeSearchValue = (event) => {
     setSearchValue(event.target.value)
   }
 
-  const [searchParams, setSearchParams] = useSearchParams({
-    mq: ''
-  })
-
-  const mq = searchParams.get('mq')
-
   const handleSearchMovie = () => {
     if(mq==searchValue) return;
-
+    setSearchParams({ mq: searchValue });
     navigate(`/search?mq=${searchValue}`)
   }
 
@@ -31,6 +30,11 @@ const SearchPage = () => {
     }
   }
 
+  useEffect(() => {
+    
+    setSearchValue(mq);
+    
+  }, [mq]);
   
 
   return (
