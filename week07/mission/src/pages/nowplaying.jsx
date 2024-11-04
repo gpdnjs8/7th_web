@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import M_Comp from '../components/movies'
 import styled from 'styled-components';
 import useCustomFetch from '../hooks/useCustomFetch';
+import { useGetMovies } from '../hooks/queries/useGetMovies';
+import Card_list_sk from '../components/card_list_sk';
+import { useQuery } from '@tanstack/react-query';
+import * as S from './searchstyle'
 
 const Container = styled.div`
   display: flex; 
@@ -12,13 +16,19 @@ const Container = styled.div`
 `;
 
 const NowPlayingPage = () => {
-    const {data: movies, isLoading, isError} = useCustomFetch('/movie/now_playing?language=ko-KR&page=1');
+    const {data: movies, isPending, isError} = useQuery({
+      queryFn: () => useGetMovies({category: 'now_playing', pageParam: 1}),
+      queryKey: ['movies', 'now_playing']
+    })
 
-    if(isLoading){
-      return<div>
-          <h1>Loading...</h1>
-      </div>
+    if(isPending){
+      return (
+        <S.MovieGridContainer>
+          <Card_list_sk/>
+        </S.MovieGridContainer>
+      )
     }
+
     if(isError){
       return<div>
           <h1>Error</h1>
