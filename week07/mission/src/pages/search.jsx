@@ -4,7 +4,6 @@ import * as S from './searchstyle.js'
 import {useState, useEffect} from 'react'
 import SearchMovieList from '../components/searchmovielist.jsx';
 
-
 const SearchPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();

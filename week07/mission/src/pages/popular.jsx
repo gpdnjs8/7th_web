@@ -2,7 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import M_Comp from '../components/movies'
 import styled from 'styled-components';
-import useCustomFetch from '../hooks/useCustomFetch';
+import Card_list_sk from '../components/card_list_sk';
+import { useGetInfiniteMovies } from '../hooks/queries/useGetInfiniteMovies';
+import {useInView} from "react-intersection-observer"
+import ClipLoader from "react-spinner"
 
 const Container = styled.div`
   display: flex; 
@@ -12,35 +15,41 @@ const Container = styled.div`
 `;
 
 const PopularPage = () => {
-  const {data: movies, isLoading, isError} = useCustomFetch('/movie/popular?language=ko-KR&page=1');
+  const {
+    data: movies, isLoading, isFetching, hasNextPage, isPending, fetchNextPage, isFetchingNextPage, error, isError
+  } = useGetInfiniteMovies('popular');
 
-  if(isLoading){
-    return<div>
-        <h1>Loading...</h1>
-    </div>
-  }
-  if(isError){
-    return<div>
-        <h1>Error</h1>
-    </div>
-  }
-    
+  const {ref, inView} = useInView({
+    threshold: 0,
+  })
+
+  useEffect(()=>{
+    if(inView){
+      !isFetching && hasNextPage && fetchNextPage();
+    }
+  }, [inView, isFetching, hasNextPage, fetchNextPage]);
+
   return (
-    <Container>
-      {movies?.results?.length > 0 ? (
-            movies.results.map((movie) => (
-              <M_Comp
-                key={movie.id}
-                id={movie.id}
-                image={movie.poster_path} 
-                title={movie.title} 
-                releaseDate={movie.release_date} 
-              />
-            ))
-        ) : (
-            <div>Loading...</div>
-        )}
-    </Container>
+    <>
+      <Container>
+        {movies?.pages
+          ?.map(page => page.results)
+          ?.flat()
+          ?.map((movie, _) => (
+            <M_Comp
+              key={movie.id}
+              id={movie.id}
+              image={movie.poster_path} 
+              title={movie.title} 
+              releaseDate={movie.release_date} />
+          ))
+        }
+        {isFetching && <Card_list_sk/>}
+      </Container>
+      <div ref={ref} style={{marginTop: '50px', justifyContent: 'center', width: '100%'}}>
+        {isFetching && <ClipLoader color={'#fff'}/>}
+      </div>
+    </> 
   );
 };
 

@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import M_Comp from '../components/movies'
 import styled from 'styled-components';
-import useCustomFetch from '../hooks/useCustomFetch';
-import { useGetMovies } from '../hooks/queries/useGetMovies';
 import Card_list_sk from '../components/card_list_sk';
-import { useQuery } from '@tanstack/react-query';
-import * as S from './searchstyle'
+import { useGetInfiniteMovies } from '../hooks/queries/useGetInfiniteMovies';
+import {useInView} from "react-intersection-observer"
+import ClipLoader from "react-spinner"
 
 const Container = styled.div`
   display: flex; 
@@ -16,41 +15,41 @@ const Container = styled.div`
 `;
 
 const NowPlayingPage = () => {
-    const {data: movies, isPending, isError} = useQuery({
-      queryFn: () => useGetMovies({category: 'now_playing', pageParam: 1}),
-      queryKey: ['movies', 'now_playing']
+    const {
+      data: movies, isLoading, isFetching, hasNextPage, isPending, fetchNextPage, isFetchingNextPage, error, isError
+    } = useGetInfiniteMovies('now_playing');
+
+    const {ref, inView} = useInView({
+      threshold: 0,
     })
 
-    if(isPending){
-      return (
-        <S.MovieGridContainer>
-          <Card_list_sk/>
-        </S.MovieGridContainer>
-      )
-    }
-
-    if(isError){
-      return<div>
-          <h1>Error</h1>
-      </div>
-    }
+    useEffect(()=>{
+      if(inView){
+        !isFetching && hasNextPage && fetchNextPage();
+      }
+    }, [inView, isFetching, hasNextPage, fetchNextPage]);
 
     return (
+      <>
         <Container>
-          {movies?.results?.length > 0 ? (
-                movies.results.map((movie) => (
-                  <M_Comp
-                    key={movie.id}
-                    id={movie.id}
-                    image={movie.poster_path} 
-                    title={movie.title} 
-                    releaseDate={movie.release_date} 
-                  />
-                ))
-            ) : (
-                <div>Loading...</div>
-            )}
+          {movies?.pages
+            ?.map(page => page.results)
+            ?.flat()
+            ?.map((movie, _) => (
+              <M_Comp
+                key={movie.id}
+                id={movie.id}
+                image={movie.poster_path} 
+                title={movie.title} 
+                releaseDate={movie.release_date} />
+            ))
+          }
+          {isFetching && <Card_list_sk/>}
         </Container>
+        <div ref={ref} style={{marginTop: '50px', justifyContent: 'center', width: '100%'}}>
+          {isFetching && <ClipLoader color={'#fff'}/>}
+        </div>
+      </> 
     );
 };
     

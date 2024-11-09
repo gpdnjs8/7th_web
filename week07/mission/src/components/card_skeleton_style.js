@@ -59,7 +59,7 @@ const TitleBox = styled.div`
 
 const DescriptionBox = styled.div`;
     background: rgb(230, 230, 230);
-    height: 15px;
+    height: 25px;
     border-radius: 5px;
     animation: ${skeleton} 3s 1s infinite linear alternate;
 `
