@@ -10,9 +10,9 @@ function validateSignup(values) {
     }
     
     if (!values.password) {
-        errors.password = '비밀번호는 8자 이상이어야 합니다.';
-    } else if (values.password.length < 8 || values.password.length > 16) {
-        errors.password = '비밀번호는 8 ~ 16자 사이로 입력해주세요.';
+        errors.password = '비밀번호는 4자 이상이어야 합니다.';
+    } else if (values.password.length < 4 || values.password.length > 16) {
+        errors.password = '비밀번호는 4 ~ 16자 사이로 입력해주세요.';
     }
     
     if (!values.passwordCheck) {

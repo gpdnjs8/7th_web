@@ -2,8 +2,11 @@
 import styled from "styled-components"
 import useForm from "../hooks/useForm"             // useForm hook
 import { validateLogin } from "../utils/validate";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const login = useForm({
     initialValue: {
       email: '',
@@ -12,9 +15,23 @@ const LoginPage = () => {
     validate: validateLogin,
   });
 
-  const handlePressLogin = () => {
-    console.log(login.values.email, login.values.password)
-  }
+  const handlePressLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', {
+        email: login.values.email,
+        password: login.values.password,
+      });
+
+      const { accessToken, refreshToken } = response.data;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
+      navigate('/'); 
+    } catch (error) {
+      console.error('로그인 오류:', error.response?.data || error);
+      alert(error.response?.data?.message || '로그인에 실패했습니다.');
+    }
+  };
 
   const isFormValid = !login.errors.email && !login.errors.password;
 

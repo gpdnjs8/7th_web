@@ -2,22 +2,35 @@
 import styled from "styled-components"
 import useForm from "../hooks/useForm"             // useForm hook
 import { validateSignup } from "../utils/validsignup";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
+  const navigate = useNavigate(); 
   const signup = useForm({
     initialValue: {
       email: '',
       password: '',
-      password_check: '',    // password check
+      password_check: '',   
     },
     validate: validateSignup,
   });
 
-  const handlePressLogin = () => {
-    console.log(signup.values.email, signup.values.password, signup.values.passwordCheck);
+  const handlePressSignUp = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/register', {
+        email: signup.values.email,
+        password: signup.values.password,
+        passwordCheck: signup.values.passwordCheck,
+      });
+      alert('회원가입이 성공적으로 완료되었습니다.');
+      navigate('/login'); 
+    } catch (error) {
+      console.error('회원가입 오류:', error.response?.data || error);
+      alert(error.response?.data?.message || '회원가입에 실패했습니다.');
+    }
   }
 
-  // check
   const isFormValid = !signup.errors.email && !signup.errors.password && !signup.errors.passwordCheck && signup.values.password === signup.values.passwordCheck;
 
   return (
@@ -49,8 +62,8 @@ const SignUpPage = () => {
       {signup.touched.passwordCheck && signup.errors.passwordCheck && <ErrorText>{signup.errors.passwordCheck}</ErrorText>}
 
       <Button
-        onClick={handlePressLogin}
-        disabled={!isFormValid}
+        onClick={handlePressSignUp}
+        disabled={!isFormValid}  // 폼이 유효하지 않으면 버튼 비활성화
         isFormValid={isFormValid}
       >회원가입</Button>
     </Container>
