@@ -2,15 +2,17 @@
 import { useParams } from "react-router-dom";
 import useCustomFetch from '../hooks/useCustomFetch';
 import './detail.css';
+import { useQuery } from "@tanstack/react-query";
+import { useGetMovies } from "../hooks/queries/useGetMovies";
 
 const DetailPage=()=>{
     const {movieId} = useParams();
-    const { data: movie, isLoading: movieLoading, isError: movieError } = useCustomFetch(`/movie/${movieId}?language=ko-KR`);
+    const { data: movie, isLoading: movieLoading, isError: movieError } = useQuery({
+        queryFn: () => useGetMovies({category: movieId, pageParam: 1}),
+        queryKey: ['movie', movieId]
+    })
     const { data: credits, isLoading: creditsLoading, isError: creditsError } = useCustomFetch(`/movie/${movieId}/credits?language=ko-KR`);
    
-    if (!movie || !credits) {
-        return <h1>No data</h1>;
-    }
     if (movieLoading || creditsLoading) {
         return <h1>Loading...</h1>;
     }
