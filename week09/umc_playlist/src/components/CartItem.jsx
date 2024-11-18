@@ -12,7 +12,7 @@ const CartItem = ({id, title, singer, price, img, amount}) => {
                 <h4>
                     {title} | {singer}
                 </h4>
-                
+
                 <h4 className="item-price">₩ {price}</h4>
             </div>
                 
