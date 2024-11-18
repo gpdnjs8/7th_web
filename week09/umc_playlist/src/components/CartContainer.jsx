@@ -24,9 +24,8 @@ const CartContainer = () => {
             <footer>
                 <hr />
                 <div className="cart-total">
-                    <h4>
-                        총 가격 <span>₩ {total}원</span>
-                    </h4>
+                    <h4>총 가격 </h4>
+                    <span>₩ {total}원</span>
                 </div>
                 <button className="btn clear-btn" onClick={() => {
                     dispatch(clearCart());

@@ -5,7 +5,7 @@ body{
 /* CartContainer */
 .cart {
   max-width: 1200px;
-  margin: 50px auto;
+  margin: 40px auto;
   padding: 20px;
   background-color: #f8f9fa; 
   border-radius: 8px;
@@ -16,7 +16,7 @@ body{
   margin-bottom: 20px;
 }
 .cart header h2 {
-  font-size: 40px;
+  font-size: 38px;
   color: #000000; 
   margin-bottom: 10px;
 }
@@ -24,19 +24,20 @@ body{
   margin-top: 20px;
 }
 .cart-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: 18px;
-  margin: 20px 0;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
 }
 .cart-total h4 {
+  margin: 0;
   font-weight: bold;
   color: #333;
 }
 .cart-total span {
-  color: gray; 
-  font-size: 19px;
+  text-align: right;
+  font-weight: bold;
+  color: #5b5a5a; 
 }
 .btn {
   display: block;
@@ -95,8 +96,8 @@ body{
   transition: background-color 0.3s ease;
 }
 .amount-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   fill: #c2ede4; 
   transition: transform 0.2s ease-in-out;
 }
@@ -175,7 +176,7 @@ button:hover {
 }
 .btn {
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   border: none;
   border-radius: 5px;
@@ -217,7 +218,7 @@ nav {
 }
 .nav-center h3 {
   color: #f9f9f9; 
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   margin: 0;
   letter-spacing: 2px;
