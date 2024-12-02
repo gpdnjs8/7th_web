@@ -1,6 +1,6 @@
 import reactDom from "react-dom";
 
-const ModalPortal = () => {
+const ModalPortal = ({children}) => {
     if (typeof window === "undefined")  return null;
 
     const node = document.getElementById("portal");
